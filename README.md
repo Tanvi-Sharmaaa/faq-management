@@ -9,17 +9,9 @@ A powerful FAQ management system with multilingual support, allowing admins to m
 - **Admin Panel**: Built using AdminJS to manage FAQs in a simple, intuitive way.
 - **Caching**: Caches FAQ data using Redis to improve performance.
 - **WYSIWYG Editor**: Rich text editor for adding and editing FAQ answers.
+- **MongoDB**: Stores FAQ data with translations.
 
----
 
-## Table of Contents
-
-1. [Installation Steps]
-2. [API Usage Examples]
-3. [Admin Panel Access]
-4. [Running the Application]
-5. [Contributing]
-6. [License]
 
 ---
 
@@ -79,105 +71,6 @@ PORT=3000
 Starts on http://localhost:3000
 2. Frontend:
    Starts on http://localhost:5000
-
-
-# MultiFAQ - Multilingual FAQ Management System
-
-A multilingual FAQ management system with Redis caching and MongoDB for storing frequently asked questions in multiple languages. This project allows you to manage and fetch FAQs in various languages, improving performance through caching.
-
-## Features
-- **Multilingual Support**: FAQs can be added in multiple languages (e.g., English, Telugu, Hindi, etc.).
-- **Redis Cache**: Uses Redis to cache FAQ data for faster retrieval and reduced database load.
-- **MongoDB**: Stores FAQ data with translations.
-- **Admin Panel**: Allows administrators to add and manage FAQs.
-- **API Endpoints**: Exposes RESTful API endpoints to fetch FAQs based on language.
-- **Unit Tests**: Ensures correct functionality of FAQ routes.
-
-## Project Structure
-```
-/src
-    /config
-        redis.js         // Redis configuration and utility functions
-        db.js            // MongoDB connection logic
-    /middleware
-        requireLogin.js  // Ensuring adminRoutes are secured    
-    /models
-        faqModel.js      // Mongoose schema for storing FAQs
-    /routes
-        faqRoutes.js     // API routes for CRUD operations
-        adminRoutes.js   // API Routes for admin portal
-    /utils
-        translate.js     // Functions for translation (if used)
-    /views
-        admin.ejs        // admin dashboard for creating and managing FAQ's
-        edit-faq.ejs     // edit a faq
-        login.ejs        // login portal for admin
-        user.ejs         // user portal to view FAQ's
-    app.js               // Main Express application setup
-/tests
-    faqRoutes.test.js   // Unit tests for the FAQ routes
-    redis.test.js 
-    translate.test.js
-```
-
-## Installation
-### Prerequisites
-- Node.js
-- MongoDB
-- Redis
-
-### Steps to Set Up the Project
-1. **Clone the repository:**
-   ```sh
-   git clone https://github.com/siddu015/MultiFAQ.git
-   cd MultiFAQ
-   ```
-2. **Install dependencies:**
-   ```sh
-   npm install
-   ```
-3. **Set up MongoDB and Redis:**
-    - Ensure that MongoDB and Redis are installed and running.
-    - Configure MongoDB connection in `/src/config/db.js`.
-    - Configure Redis connection in `/src/config/redis.js`.
-4. **Set environment variables:**
-   Create a `.env` file in the root directory:
-   ```sh
-   MONGO_URI=mongodb://localhost:27017/multifaq
-   REDIS_HOST=localhost
-   REDIS_PORT=6379
-   GOOGLE_CLOUD_API_KEY=your-api-key
-   SECRET_KEY=yoursecretkey
-   ```
-5. **Run the application:**
-   ```sh
-   cd src
-   nodemon app.js
-   ```
-   The app should now be running on [http://localhost:8080/faqs](http://localhost:8080/faqs).
-
-## Running with Docker
-You can also run this project using Docker and `docker-compose` for easy deployment.
-
-### Steps to Run with Docker
-1. **Ensure Docker and Docker Compose are installed.**
-2. **Build and start the containers:**
-   ```sh
-   docker-compose up --build
-   ```
-   This will build and start the following services:
-    - `app`: The MultiFAQ Node.js application.
-    - `mongo`: MongoDB database.
-    - `redis`: Redis cache service.
-
-3. **Access the application:**
-    - API: `http://localhost:8080/api/faqs?lang=en`
-    - Admin Panel: `http://localhost:8080/admin`
-
-4. **Stopping the services:**
-   ```sh
-   docker-compose down
-   ```
 
 ## API Endpoints
 ### 1. **POST /api/faqs**
