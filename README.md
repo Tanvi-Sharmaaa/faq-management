@@ -42,161 +42,189 @@ First, clone the project to your local machine:
 ```bash
 git clone https://github.com/Tanvi-Sharmaaa/faq-management.git
 cd faq-management
+```
 
-Backend Setup
-Navigate to the backend directory:
+## Backend Setup
 
-bash
-Copy
-Edit
-cd backend
-Install the dependencies:
+1. **Navigate to the backend directory**:
 
-bash
-Copy
-Edit
-npm install
-Create a .env file in the backend folder and configure your MongoDB URI and Redis (optional):
+   ```bash
+   cd backend
+   ```
+2. Install Dependencies:
+```bash
+  npm install
+```
+3. Set Up Environment Variables:
+```bash
+MONGO_URI=your_mongo_uri
+PORT=3000
+```
 
-plaintext
-Copy
-Edit
-MONGO_URI=mongodb://your_mongo_connection_string
-REDIS_HOST=127.0.0.1
-REDIS_PORT=6379
-Start the backend server:
+## Frontend Setup
 
-bash
-Copy
-Edit
-npm start
-This will start the backend on http://localhost:3000.
+1. **Navigate to the frontend directory**:
 
-Frontend Setup
-Navigate to the frontend directory:
+   ```bash
+   cd frontend
+   ```
+2. Install Dependencies:
+```bash
+  npm install
+```
+3. Start the frontend server
 
-bash
-Copy
-Edit
-cd frontend
-Install the frontend dependencies:
+## Running the application
+1. Backend:
+Starts on http://localhost:3000
+2. Frontend:
+   Starts on http://localhost:5000
 
-bash
-Copy
-Edit
-npm install
-Start the frontend server:
 
-bash
-Copy
-Edit
-npm start
-This will start the frontend on http://localhost:5000.
+# MultiFAQ - Multilingual FAQ Management System
 
-API Usage Examples
-1. Create FAQ
-Endpoint: /api/faqs
+A multilingual FAQ management system with Redis caching and MongoDB for storing frequently asked questions in multiple languages. This project allows you to manage and fetch FAQs in various languages, improving performance through caching.
 
-Method: POST
+## Features
+- **Multilingual Support**: FAQs can be added in multiple languages (e.g., English, Telugu, Hindi, etc.).
+- **Redis Cache**: Uses Redis to cache FAQ data for faster retrieval and reduced database load.
+- **MongoDB**: Stores FAQ data with translations.
+- **Admin Panel**: Allows administrators to add and manage FAQs.
+- **API Endpoints**: Exposes RESTful API endpoints to fetch FAQs based on language.
+- **Unit Tests**: Ensures correct functionality of FAQ routes.
 
-Request Body:
+## Project Structure
+```
+/src
+    /config
+        redis.js         // Redis configuration and utility functions
+        db.js            // MongoDB connection logic
+    /middleware
+        requireLogin.js  // Ensuring adminRoutes are secured    
+    /models
+        faqModel.js      // Mongoose schema for storing FAQs
+    /routes
+        faqRoutes.js     // API routes for CRUD operations
+        adminRoutes.js   // API Routes for admin portal
+    /utils
+        translate.js     // Functions for translation (if used)
+    /views
+        admin.ejs        // admin dashboard for creating and managing FAQ's
+        edit-faq.ejs     // edit a faq
+        login.ejs        // login portal for admin
+        user.ejs         // user portal to view FAQ's
+    app.js               // Main Express application setup
+/tests
+    faqRoutes.test.js   // Unit tests for the FAQ routes
+    redis.test.js 
+    translate.test.js
+```
 
-json
-Copy
-Edit
-{
-  "question": "What is Node.js?",
-  "answer": "Node.js is a JavaScript runtime built on Chrome's V8 engine."
-}
-Response:
+## Installation
+### Prerequisites
+- Node.js
+- MongoDB
+- Redis
 
-json
-Copy
-Edit
-{
-  "success": true,
-  "data": {
+### Steps to Set Up the Project
+1. **Clone the repository:**
+   ```sh
+   git clone https://github.com/siddu015/MultiFAQ.git
+   cd MultiFAQ
+   ```
+2. **Install dependencies:**
+   ```sh
+   npm install
+   ```
+3. **Set up MongoDB and Redis:**
+    - Ensure that MongoDB and Redis are installed and running.
+    - Configure MongoDB connection in `/src/config/db.js`.
+    - Configure Redis connection in `/src/config/redis.js`.
+4. **Set environment variables:**
+   Create a `.env` file in the root directory:
+   ```sh
+   MONGO_URI=mongodb://localhost:27017/multifaq
+   REDIS_HOST=localhost
+   REDIS_PORT=6379
+   GOOGLE_CLOUD_API_KEY=your-api-key
+   SECRET_KEY=yoursecretkey
+   ```
+5. **Run the application:**
+   ```sh
+   cd src
+   nodemon app.js
+   ```
+   The app should now be running on [http://localhost:8080/faqs](http://localhost:8080/faqs).
+
+## Running with Docker
+You can also run this project using Docker and `docker-compose` for easy deployment.
+
+### Steps to Run with Docker
+1. **Ensure Docker and Docker Compose are installed.**
+2. **Build and start the containers:**
+   ```sh
+   docker-compose up --build
+   ```
+   This will build and start the following services:
+    - `app`: The MultiFAQ Node.js application.
+    - `mongo`: MongoDB database.
+    - `redis`: Redis cache service.
+
+3. **Access the application:**
+    - API: `http://localhost:8080/api/faqs?lang=en`
+    - Admin Panel: `http://localhost:8080/admin`
+
+4. **Stopping the services:**
+   ```sh
+   docker-compose down
+   ```
+
+## API Endpoints
+### 1. **POST /api/faqs**
+- **Description**: Add a new FAQ.
+- **Request Body**:
+  ```json
+  {
     "question": "What is Node.js?",
-    "answer": "Node.js is a JavaScript runtime built on Chrome's V8 engine.",
-    "translations": {
-      "en": {
-        "question": "What is Node.js?",
-        "answer": "Node.js is a JavaScript runtime built on Chrome's V8 engine."
-      },
-      "fr": {
-        "question": "Qu'est-ce que Node.js?",
-        "answer": "Node.js est un moteur JavaScript basé sur V8 de Chrome."
-      }
-    }
+  "answer": "Node.js is a JavaScript runtime built on Chrome's V8 engine."
   }
-}
-2. Get All FAQs
-Endpoint: /api/faqs
+  ```
 
-Method: GET
 
-Query Parameter: lang (optional, defaults to en)
+### 2. **GET /api/faqs**
+- **Description**: Fetch FAQs in the specified language.
+- **Response**:
+    - Returns a list of FAQs in the specified language.
+    - If data is not cached, it fetches from the database and caches results in Redis.
 
-Example:
+## Running Unit Tests
+This project includes unit tests for the FAQ routes, written using Jest.
 
-plaintext
-Copy
-Edit
-http://localhost:3000/api/faqs?lang=fr
-Response:
+### Run Tests
+To run the tests, use the following command:
+```sh
+npx mocha ./test/**/*.test.js
+```
 
-json
-Copy
-Edit
-{
-  "success": true,
-  "data": [
-    {
-      "question": "What is Node.js?",
-      "answer": "Node.js is a JavaScript runtime built on Chrome's V8 engine."
-    },
-    {
-      "question": "Qu'est-ce que Node.js?",
-      "answer": "Node.js est un moteur JavaScript basé sur V8 de Chrome."
-    }
-  ]
-}
-Admin Panel Access
-Once the backend is running, you can access the Admin Panel at:
+### Test Coverage
+The tests cover:
+- Adding a new FAQ and ensuring that Redis cache is cleared.
+- Fetching FAQs from cache or database based on the cache state.
 
-plaintext
-Copy
-Edit
-http://localhost:3000/admin
-Use this interface to manage FAQs. AdminJS makes it easy to add, edit, and delete FAQs.
+## Contribution Guidelines
+1. **Fork the repository.**
+2. **Create a new branch:**
+   ```sh
+   git checkout -b feature/your-feature-name
+   ```
+3. **Commit your changes:**
+   ```sh
+   git commit -am 'Add your feature'
+   ```
+4. **Push to the branch:**
+   ```sh
+   git push origin feature/your-feature-name
+   ```
+5. **Open a pull request.**
 
-Default Admin Panel Login:
-The admin panel does not require any specific authentication by default. If you would like to set up custom authentication, you can configure it in AdminJS settings.
-
-Running the Application
-Backend: Starts on http://localhost:3000.
-Frontend: Starts on http://localhost:5000.
-Admin Panel: Accessible at http://localhost:3000/admin.
-Starting Both Servers
-You can run both servers (frontend and backend) simultaneously. It's recommended to use a tool like Nodemon for auto-restarting the backend when you make changes:
-
-Install Nodemon globally:
-
-bash
-Copy
-Edit
-npm install -g nodemon
-Run backend with Nodemon:
-
-bash
-Copy
-Edit
-nodemon server.js
-Contributing
-We welcome contributions! Please follow these steps to contribute to this project:
-
-Fork the repository.
-Create a new branch for your feature (git checkout -b feature-name).
-Make changes and commit them (git commit -m 'Add new feature').
-Push your changes to your forked repository (git push origin feature-name).
-Open a pull request.
+---
