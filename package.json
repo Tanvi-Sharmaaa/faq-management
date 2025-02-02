@@ -1,0 +1,37 @@
+{
+  "name": "faq-management",
+  "version": "1.0.0",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "test": "mocha 'src/test/**/*.test.js' --timeout 5000"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "@adminjs/express": "^6.1.1",
+    "@adminjs/mongoose": "^4.1.0",
+    "@vitalets/google-translate-api": "^9.2.1",
+    "adminjs": "^7.8.15",
+    "body-parser": "^1.20.3",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.7",
+    "express": "^4.21.2",
+    "google-translate-api": "^2.3.0",
+    "ioredis": "^5.4.2",
+    "mongoose": "^8.9.6",
+    "node-cache": "^5.1.2",
+    "redis": "^4.7.0"
+  },
+  "devDependencies": {
+    "chai": "^5.1.2",
+    "chai-http": "^5.1.1",
+    "eslint": "^9.19.0",
+    "jest": "^29.7.0",
+    "mocha": "^11.1.0",
+    "nodemon": "^3.1.9",
+    "supertest": "^7.0.0"
+  }
+}
